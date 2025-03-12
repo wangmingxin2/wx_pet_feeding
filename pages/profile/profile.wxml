@@ -1,0 +1,8 @@
+<view class="container">
+  <view class="user-info">
+    <!-- 用户信息将在这里展示 -->
+  </view>
+  <view class="menu-list">
+    <!-- 功能菜单将在这里展示 -->
+  </view>
+</view> 

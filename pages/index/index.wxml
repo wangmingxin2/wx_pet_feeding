@@ -1,0 +1,78 @@
+<!--index.wxml-->
+<login id="loginComponent" bind:loginSuccess="onLoginSuccess"></login>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 轮播图 -->
+    <swiper class="banner" 
+            indicator-dots="true" 
+            autoplay="true" 
+            interval="3000" 
+            duration="500"
+            circular="true"
+            indicator-color="rgba(255, 255, 255, 0.6)"
+            indicator-active-color="#ffffff">
+      <swiper-item wx:for="{{bannerList}}" wx:key="id">
+        <image src="{{item.imageUrl}}" 
+               mode="widthFix"
+               class="banner-image"/>
+      </swiper-item>
+    </swiper>
+
+    <!-- 功能卡片 -->
+    <view class="function-card">
+      <!-- 上半部分 -->
+      <view class="card-section">
+        <view class="nav-item" bindtap="navigateToServices">
+          <image src="/images/icons/service.png" class="nav-icon"/>
+          <text>宠物服务</text>
+        </view>
+        <view class="nav-item" bindtap="navigateToOrders">
+          <image src="/images/icons/order.png" class="nav-icon"/>
+          <text>服务订单</text>
+        </view>
+      </view>
+
+      <!-- 分割线 -->
+      <view class="divider"></view>
+
+      <!-- 下半部分 -->
+      <view class="card-section">
+        <view class="service-item" bindtap="navigateToCatFeeding">
+          <image src="/images/icons/cat.png" class="service-icon"/>
+          <text>上门喂猫</text>
+        </view>
+        <view class="service-item" bindtap="navigateToDogFeeding">
+          <image src="/images/icons/dog.png" class="service-icon"/>
+          <text>上门喂狗</text>
+        </view>
+        <view class="service-item" bindtap="navigateToMembership">
+          <image src="/images/icons/vip.png" class="service-icon"/>
+          <text>会员充值</text>
+        </view>
+        <view class="service-item" bindtap="navigateToAbout">
+          <image src="/images/icons/about.png" class="service-icon"/>
+          <text>关于我们</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 公告卡片 -->
+    <view class="notice-card">
+      <image src="/images/banner/banner4.jpg" mode="aspectFill" class="notice-banner"/>
+      <view class="notice-body">
+        <view class="notice-title">公告</view>
+        <view class="notice-content">
+          <text>{{noticeText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 介绍卡片 -->
+    <view class="intro-card">
+      <view class="intro-title">小程序介绍</view>
+      <view class="intro-content">
+        <text>{{introText}}</text>
+      </view>
+    </view>
+  </view>
+</scroll-view>

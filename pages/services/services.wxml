@@ -1,0 +1,5 @@
+<view class="container">
+  <view class="service-list">
+    <!-- 服务列表将在这里展示 -->
+  </view>
+</view> 
