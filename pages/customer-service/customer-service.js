@@ -8,7 +8,7 @@ Page({
     userAvatar: 'http://60.204.157.137:9000/pet/1741678572733_1.jpeg',
     serviceAvatar: '/images/icons/kefu.png',
     lastMessageId: '',
-    userId: '1',
+    userId: '',  // 将从storage中获取
     socketOpen: false,
     savedMessages: [], // 用于保存消息历史
     currentPage: 1,
@@ -19,6 +19,12 @@ Page({
   },
 
   onLoad: function () {
+    // 从storage获取userId
+    const userId = wx.getStorageSync('userId')
+    if (userId) {
+      this.setData({ userId: userId })
+    }
+
     this.checkLogin()
     if (app.globalData.isLoggedIn) {
       // 先移除可能存在的旧监听器
@@ -46,9 +52,15 @@ Page({
             console.log('检测到WebSocket未连接，正在重新连接...')
             this.connectSocket()
           } else {
-            // 发送心跳包检查连接是否真正有效
+            // 修改心跳包格式
+            const heartbeat = {
+              toUserId: '999',  // 客服ID
+              content: 'ping',
+              type: 'heartbeat',
+              userId: this.data.userId
+            }
             wx.sendSocketMessage({
-              data: 'ping',
+              data: JSON.stringify(heartbeat),
               fail: () => {
                 console.log('心跳包发送失败，重新建立连接')
                 this.setData({ socketOpen: false })
@@ -113,25 +125,35 @@ Page({
     })
 
     wx.onSocketMessage(function (res) {
-      console.log('=== 收到服务器消息 ===')
-      console.log('原始消息数据：', res)
-      console.log('消息内容：', res.data)
+      console.log('收到服务器消息:', res.data)
 
       try {
         const message = JSON.parse(res.data)
-        console.log('解析后的消息：', message)
-
-        if (message === 'pong') {
+        if (message.type === 'heartbeat' || message.content === 'pong') {
           console.log('收到心跳响应')
           return
         }
+        let messageType;
+        // 将 ID 转换为相同类型进行比较
+        if (message.senderId === String(that.data.userId)) {
+          messageType = 'send';
+        }
+        // 如果接收者是当前用户，显示在左边
+        else if (message.recipientId === String(that.data.userId)) {
+          messageType = 'receive';
+        }
+        // 其他情况显示在左边
+        else {
+          messageType = 'receive';
+        }
 
-        // 构建新消息对象
         const newMessage = {
           id: message.id || Date.now(),
-          type: message.userId === that.data.userId ? 'send' : 'receive',
+          type: messageType,
           content: message.content,
-          time: that.formatTime(new Date(message.timestamp || Date.now()))
+          time: that.formatTime(new Date(message.sentTime || Date.now())),
+          senderId: message.senderId,
+          recipientId: message.recipientId
         }
 
         that.setData({
@@ -139,23 +161,8 @@ Page({
           savedMessages: [...that.data.messages, newMessage],
           lastMessageId: `msg-${newMessage.id}`
         })
-
-        console.log('消息已添加到列表，当前消息数：', that.data.messages.length)
       } catch (error) {
         console.error('消息处理出错：', error)
-        // 尝试处理非JSON格式的消息
-        if (typeof res.data === 'string') {
-          const newMessage = {
-            id: Date.now(),
-            type: 'receive',
-            content: res.data,
-            time: that.formatTime(new Date())
-          }
-          that.setData({
-            messages: [...that.data.messages, newMessage],
-            savedMessages: [...that.data.messages, newMessage]
-          })
-        }
       }
     })
 
@@ -276,11 +283,9 @@ Page({
 
   // 格式化时间
   formatTime: function (date) {
-    const month = date.getMonth() + 1
-    const day = date.getDate()
     const hour = date.getHours()
     const minute = date.getMinutes()
-    return `${month}月${day}日 ${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}`
+    return `${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}`
   },
 
   // 添加加载历史消息的方法
@@ -297,15 +302,35 @@ Page({
       },
       success: function (res) {
         if (res.data.code === 200 && res.data.data.records) {
-          // 将历史消息转换为正确的格式，并按时间倒序排列
+          // 将历史消息转换为正确的格式，并按时间升序排列
           const historyMessages = res.data.data.records
             .sort((a, b) => new Date(a.sentTime) - new Date(b.sentTime)) // 按时间升序排序
-            .map(msg => ({
-              id: msg.id,
-              type: msg.senderId === that.data.userId ? 'send' : 'receive',
-              content: msg.content,
-              time: that.formatTime(new Date(msg.sentTime))
-            }))
+            .map(msg => {
+              let messageType;
+              // 将 ID 转换为相同类型进行比较
+              if (msg.senderId === String(that.data.userId)) {
+                messageType = 'send';
+              }
+              // 如果接收者是当前用户，显示在左边
+              else if (msg.recipientId === String(that.data.userId)) {
+                messageType = 'receive';
+              }
+              // 其他情况显示在左边
+              else {
+                messageType = 'receive';
+              }
+
+              return {
+                id: msg.id,
+                type: messageType,
+                content: msg.content,
+                time: that.formatTime(new Date(msg.sentTime)),
+                senderId: msg.senderId,
+                recipientId: msg.recipientId
+              }
+            })
+
+          console.log('处理后的历史消息：', historyMessages)
 
           // 更新消息列表
           that.setData({
@@ -316,10 +341,10 @@ Page({
             totalMessages: res.data.data.total
           })
 
-          // 如果有消息，设置第一条消息的ID用于滚动
+          // 如果有消息，设置最后一条消息的ID用于滚动
           if (historyMessages.length > 0) {
             that.setData({
-              lastMessageId: `msg-${historyMessages[0].id}`
+              lastMessageId: `msg-${historyMessages[historyMessages.length - 1].id}`
             })
           }
         } else {
@@ -355,7 +380,8 @@ Page({
 
   onLoginSuccess() {
     this.setData({
-      showLoginPopup: false
+      showLoginPopup: false,
+      userId: wx.getStorageSync('userId')  // 更新userId
     })
     this.initPage()
   },

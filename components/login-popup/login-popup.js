@@ -41,6 +41,15 @@ Component({
                   getApp().setLoginSuccess(userInfo)
                   this.triggerEvent('login-success', userInfo)
 
+                  // 存储token和userId到全局
+                  wx.setStorageSync('token', userInfo.token)
+                  wx.setStorageSync('userId', userInfo.userId)
+
+                  // 更新全局数据
+                  getApp().globalData.token = userInfo.token
+                  getApp().globalData.userId = userInfo.userId
+                  getApp().globalData.isLoggedIn = true
+
                   wx.showToast({
                     title: '登录成功',
                     icon: 'success'

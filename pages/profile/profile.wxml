@@ -1,8 +1,71 @@
-<view class="container">
-  <view class="user-info">
-    <!-- 用户信息将在这里展示 -->
+<view class="profile-container">
+  <!-- 顶部背景及个人信息卡片 -->
+  <view class="profile-header">
+    <view class="header-bg"></view>
+    <view class="user-card">
+      <view class="avatar-container">
+        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+      </view>
+      <view class="user-info">
+        <view class="name-row">
+          <text class="username">{{userInfo.name}}</text>
+          <view class="vip-tag">
+            <image class="vip-icon" src="/images/icons/vip.png"></image>
+            <text>{{userInfo.membershipLevel}}</text>
+          </view>
+        </view>
+        <view class="user-detail">
+          <text class="user-id">ID: {{userInfo.userId}}</text>
+          <text class="divider-dot">·</text>
+          <text class="user-phone">{{userInfo.phone}}</text>
+        </view>
+      </view>
+    </view>
   </view>
-  <view class="menu-list">
-    <!-- 功能菜单将在这里展示 -->
+
+  <!-- 用户资产信息 -->
+  <view class="assets-container">
+    <view class="asset-item">
+      <view class="asset-amount">
+        <text class="currency">￥</text>
+        <text class="amount">{{userInfo.balance}}</text>
+      </view>
+      <text class="asset-label">余额</text>
+    </view>
+    <view class="divider"></view>
+    <view class="asset-item">
+      <view class="asset-amount">
+        <text class="currency">￥</text>
+        <text class="amount">{{userInfo.totalSpent}}</text>
+      </view>
+      <text class="asset-label">消费总额</text>
+    </view>
+    <view class="divider"></view>
+    <view class="asset-item">
+      <view class="asset-amount">
+        <text class="discount">{{userInfo.discountRate * 10}}</text>
+        <text class="unit">折</text>
+      </view>
+      <text class="asset-label">会员折扣</text>
+    </view>
+  </view>
+
+  <!-- 功能列表 -->
+  <view class="function-list">
+    <view class="function-item" bindtap="onTapOrders">
+      <image class="function-icon" src="/images/icons/order.png"></image>
+      <text class="function-text">我的订单</text>
+      <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+    </view>
+    <view class="function-item" bindtap="onTapAddress">
+      <image class="function-icon" src="/images/icons/address.png"></image>
+      <text class="function-text">收货地址</text>
+      <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+    </view>
+    <view class="function-item" bindtap="onTapSettings">
+      <image class="function-icon" src="/images/icons/settings.png"></image>
+      <text class="function-text">设置</text>
+      <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+    </view>
   </view>
 </view> 

@@ -5,31 +5,23 @@ const request = (options) => {
     const token = wx.getStorageSync('token')
 
     wx.request({
-      ...options,
-      url: `${app.globalData.baseUrl}${options.url}`,
+      url: app.globalData.baseUrl + options.url,
+      method: options.method || 'GET',
+      data: options.data,
       header: {
         'Content-Type': 'application/json',
-        'Authorization': token ? `Bearer ${token}` : '',
-        ...options.header
+        'Authorization': token ? `Bearer ${token}` : ''
       },
       success: (res) => {
-        if (res.data.code === 401) {
-          // token 过期或无效
-          app.logout()
-          // 显示登录弹窗
-          const pages = getCurrentPages()
-          const currentPage = pages[pages.length - 1]
-          if (currentPage && currentPage.setData) {
-            currentPage.setData({
-              showLoginPopup: true
-            })
-          }
-          reject(res.data)
-        } else {
+        if (res.statusCode === 200) {
           resolve(res.data)
+        } else {
+          reject(res)
         }
       },
-      fail: reject
+      fail: (err) => {
+        reject(err)
+      }
     })
   })
 }
