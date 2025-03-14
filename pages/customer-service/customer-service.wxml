@@ -26,4 +26,11 @@
     />
     <button class="send-btn" bindtap="sendMessage">发送</button>
   </view>
+
+  <!-- 登录弹窗 -->
+  <login-popup 
+    show="{{showLoginPopup}}" 
+    bind:close="onLoginPopupClose"
+    bind:login-success="onLoginSuccess"
+  />
 </view>

@@ -1,5 +1,4 @@
 <!--index.wxml-->
-<login id="loginComponent" bind:loginSuccess="onLoginSuccess"></login>
 <scroll-view class="scrollarea" scroll-y type="list">
   <view class="container">
     <!-- 轮播图 -->
@@ -74,5 +73,12 @@
         <text>{{introText}}</text>
       </view>
     </view>
+
+    <!-- 登录弹窗 -->
+    <login-popup 
+      show="{{showLoginPopup}}" 
+      bind:close="onLoginPopupClose"
+      bind:login-success="onLoginSuccess"
+    />
   </view>
 </scroll-view>

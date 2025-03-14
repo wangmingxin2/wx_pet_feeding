@@ -12,28 +12,35 @@ App({
 
   // 检查登录状态
   checkLoginStatus() {
-    const isLoggedIn = wx.getStorageSync('isLoggedIn');
-    const userInfo = wx.getStorageSync('userInfo');
-    const openid = wx.getStorageSync('openid');
-    
-    if (isLoggedIn && userInfo && openid) {
-      this.globalData.isLoggedIn = true;
-      this.globalData.userInfo = userInfo;
-      this.globalData.openid = openid;
-    } else {
-      this.globalData.isLoggedIn = false;
-      this.globalData.userInfo = null;
-      this.globalData.openid = null;
-      // 清除可能存在的无效登录信息
-      wx.removeStorageSync('isLoggedIn');
-      wx.removeStorageSync('userInfo');
-      wx.removeStorageSync('openid');
+    const token = wx.getStorageSync('token')
+    const userInfo = wx.getStorageSync('userInfo')
+    if (token && userInfo) {
+      this.globalData.isLoggedIn = true
+      this.globalData.userInfo = userInfo
+      return true
     }
+    return false
+  },
+
+  // 登录成功后调用
+  setLoginSuccess(userInfo) {
+    this.globalData.isLoggedIn = true
+    this.globalData.userInfo = userInfo
+    wx.setStorageSync('userInfo', userInfo)
+    wx.setStorageSync('token', userInfo.token)
+  },
+
+  // 退出登录
+  logout() {
+    this.globalData.isLoggedIn = false
+    this.globalData.userInfo = null
+    wx.removeStorageSync('userInfo')
+    wx.removeStorageSync('token')
   },
 
   globalData: {
     userInfo: null,
     isLoggedIn: false,
-    openid: null
+    baseUrl: 'http://localhost:8080'  // 添加基础URL配置
   }
 })

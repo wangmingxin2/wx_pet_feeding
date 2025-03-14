@@ -1,0 +1,28 @@
+<view class="login-popup {{show ? 'show' : ''}}">
+  <view class="login-container">
+    <view class="close-btn" bindtap="onClose">
+      <image src="/images/icons/close.png" mode="aspectFit"></image>
+    </view>
+    
+    <view class="login-content">
+      <image class="login-image" src="/images/login/login-illustration.png" mode="aspectFit"></image>
+      <view class="login-title">登录</view>
+      <view class="login-desc">开通会员卡更优惠</view>
+      
+      <button 
+        class="login-btn {{loading ? 'loading' : ''}}" 
+        bindtap="onLogin"
+        disabled="{{loading}}"
+      >
+        {{loading ? '登录中...' : '微信一键登录'}}
+      </button>
+      
+      <view class="agreement-text">
+        登录即代表您已同意
+        <text class="link" bindtap="onTapUserAgreement">《用户协议》</text>
+        和
+        <text class="link" bindtap="onTapPrivacyPolicy">《隐私政策》</text>
+      </view>
+    </view>
+  </view>
+</view> 

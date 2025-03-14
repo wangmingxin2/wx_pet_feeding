@@ -1,5 +1,6 @@
 // index.js
 const defaultAvatarUrl = 'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'
+const app = getApp()
 
 Page({
   data: {
@@ -27,32 +28,36 @@ Page({
       }
     ],
     noticeText: "欢迎使用宠物喂养服务小程序！我们提供专业的宠物照护服务，让您的爱宠得到最好的照顾。",
-    introText: "我们是一家专业的宠物服务平台，提供上门喂养、遛狗等多种服务。我们的服务人员都经过专业培训，确保您的宠物得到最好的照顾。无论您是出差、旅游还是临时有事，都可以放心地把爱宠交给我们。"
+    introText: "我们是一家专业的宠物服务平台，提供上门喂养、遛狗等多种服务。我们的服务人员都经过专业培训，确保您的宠物得到最好的照顾。无论您是出差、旅游还是临时有事，都可以放心地把爱宠交给我们。",
+    showLoginPopup: false
   },
-  onLoad() {
+  onLoad: function () {
     // 检查登录状态
-    const isLoggedIn = wx.getStorageSync('isLoggedIn');
-    console.log("登录状态" + isLoggedIn);
+    this.checkLogin()
+    // 页面加载时可以从服务器获取数据
+    this.getHomeData()
+  },
 
-    this.setData({ isLoggedIn });
-    if (!isLoggedIn) {
-      this.showLoginPopup();
+  checkLogin() {
+    if (!app.checkLoginStatus()) {
+      this.setData({
+        showLoginPopup: true
+      })
     }
   },
 
-  showLoginPopup() {
-    const loginComponent = this.selectComponent('#loginComponent');
-    if (loginComponent) {
-      loginComponent.showLogin();
-    }
+  onLoginPopupClose() {
+    this.setData({
+      showLoginPopup: false
+    })
   },
 
   onLoginSuccess(e) {
     this.setData({
-      isLoggedIn: true,
-      'userInfo.avatarUrl': e.detail.avatarUrl,
-      'userInfo.nickName': e.detail.nickName
-    });
+      showLoginPopup: false
+    })
+    // 处理登录成功后的逻辑
+    app.setLoginSuccess(e.detail)
   },
 
   onChooseAvatar(e) {
@@ -83,10 +88,6 @@ Page({
         })
       }
     })
-  },
-  onLoad: function () {
-    // 页面加载时可以从服务器获取数据
-    this.getHomeData()
   },
   getHomeData: function () {
     // TODO: 调用API获取首页数据

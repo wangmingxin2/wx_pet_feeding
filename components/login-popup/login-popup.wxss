@@ -1,0 +1,85 @@
+.login-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: none;
+}
+
+.login-popup.show {
+  display: block;
+}
+
+.login-container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12rpx;
+  width: 80%;
+  padding: 40rpx;
+}
+
+.close-btn {
+  position: absolute;
+  right: 20rpx;
+  top: 20rpx;
+}
+
+.close-btn image {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.login-content {
+  text-align: center;
+}
+
+.login-image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-bottom: 30rpx;
+}
+
+.login-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.login-desc {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+}
+
+.login-btn {
+  background: #4caf50;
+  color: #fff;
+  border-radius: 40rpx;
+  margin: 40rpx 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn.loading {
+  opacity: 0.8;
+  background: #8bc34a;
+}
+
+.login-btn::after {
+  border: none;
+}
+
+.agreement-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.link {
+  color: #4caf50;
+}

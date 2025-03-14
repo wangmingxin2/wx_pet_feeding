@@ -1,28 +1,33 @@
 const app = getApp()
+import request from '../../utils/request'
 
 Page({
   data: {
     messages: [],
     inputMessage: '',
-    userAvatar: '/images/tabbar/profile.png',
+    userAvatar: 'http://60.204.157.137:9000/pet/1741678572733_1.jpeg',
     serviceAvatar: '/images/icons/kefu.png',
     lastMessageId: '',
-    userId: '',
+    userId: '1',
     socketOpen: false,
     savedMessages: [], // 用于保存消息历史
     currentPage: 1,
     totalPages: 1,
     totalMessages: 0,
-    isLoading: false  // 用于防止重复加载
+    isLoading: false,  // 用于防止重复加载
+    showLoginPopup: false  // 添加登录弹窗控制变量
   },
 
   onLoad: function () {
-    // 获取用户ID，这里使用一个临时ID，实际应该从用户系统获取
-    const userId = '1'
-    this.setData({ userId })
-    // 获取历史消息
-    this.loadHistoryMessages()
-    this.connectSocket()
+    this.checkLogin()
+    if (app.globalData.isLoggedIn) {
+      // 先移除可能存在的旧监听器
+      wx.closeSocket()
+      wx.onSocketClose(() => {
+        console.log('旧连接已关闭')
+      })
+      this.initPage()
+    }
   },
 
   onShow: function () {
@@ -77,7 +82,9 @@ Page({
 
   connectSocket: function () {
     const that = this
-    // 连接WebSocket服务器
+    // 在建立新连接前先设置好所有监听器
+    this.setupSocketListeners()
+
     wx.connectSocket({
       url: `ws://localhost:8080/websocket/${this.data.userId}`,
       success: function () {
@@ -89,60 +96,82 @@ Page({
           title: '连接失败，正在重试',
           icon: 'none'
         })
-        // 3秒后重试连接
-        setTimeout(() => {
-          that.connectSocket()
-        }, 3000)
-      },
-      // 开发环境下不校验合法域名
-      complete: function () {
-        // 使用微信小程序的调试API
-        wx.setEnableDebug({
-          enableDebug: true
-        })
       }
     })
+  },
 
-    // 监听WebSocket连接打开
-    wx.onSocketOpen(function () {
+  setupSocketListeners: function () {
+    const that = this
+
+    // 先清除可能存在的旧监听器
+    wx.closeSocket()
+
+    // 重新设置所有监听器
+    wx.onSocketOpen(function (res) {
+      console.log('=== WebSocket连接已打开 ===')
       that.setData({ socketOpen: true })
-      console.log('WebSocket连接已打开')
     })
 
-    // 监听WebSocket接收到服务器的消息
     wx.onSocketMessage(function (res) {
-      console.log('收到服务器消息：', res.data)
+      console.log('=== 收到服务器消息 ===')
+      console.log('原始消息数据：', res)
+      console.log('消息内容：', res.data)
+
       try {
         const message = JSON.parse(res.data)
-        // 将接收到的消息添加到消息列表
-        that.addMessage({
+        console.log('解析后的消息：', message)
+
+        if (message === 'pong') {
+          console.log('收到心跳响应')
+          return
+        }
+
+        // 构建新消息对象
+        const newMessage = {
           id: message.id || Date.now(),
-          type: message.senderId === that.data.userId ? 'send' : 'receive',
+          type: message.userId === that.data.userId ? 'send' : 'receive',
           content: message.content,
-          time: that.formatTime(new Date(message.sentTime || Date.now()))
+          time: that.formatTime(new Date(message.timestamp || Date.now()))
+        }
+
+        that.setData({
+          messages: [...that.data.messages, newMessage],
+          savedMessages: [...that.data.messages, newMessage],
+          lastMessageId: `msg-${newMessage.id}`
         })
+
+        console.log('消息已添加到列表，当前消息数：', that.data.messages.length)
       } catch (error) {
-        console.error('解析消息失败：', error)
+        console.error('消息处理出错：', error)
+        // 尝试处理非JSON格式的消息
+        if (typeof res.data === 'string') {
+          const newMessage = {
+            id: Date.now(),
+            type: 'receive',
+            content: res.data,
+            time: that.formatTime(new Date())
+          }
+          that.setData({
+            messages: [...that.data.messages, newMessage],
+            savedMessages: [...that.data.messages, newMessage]
+          })
+        }
       }
     })
 
-    // 监听WebSocket错误
     wx.onSocketError(function (error) {
       console.error('WebSocket错误：', error)
       that.setData({ socketOpen: false })
-      wx.showToast({
-        title: '连接异常，请重试',
-        icon: 'none'
-      })
     })
 
-    // 监听WebSocket连接关闭
-    wx.onSocketClose(function () {
-      console.log('WebSocket连接已关闭')
+    wx.onSocketClose(function (res) {
+      console.log('WebSocket连接关闭：', res)
       that.setData({ socketOpen: false })
+
       // 自动重连
       setTimeout(() => {
         if (!that.data.socketOpen) {
+          console.log('准备重新连接...')
           that.connectSocket()
         }
       }, 3000)
@@ -152,44 +181,67 @@ Page({
   // 发送消息
   sendMessage: function () {
     if (!this.data.inputMessage.trim()) {
-      return
+      return;
     }
 
     if (!this.data.socketOpen) {
       wx.showToast({
         title: '连接已断开，请重试',
         icon: 'none'
-      })
-      return
+      });
+      return;
     }
+
+    const messageContent = this.data.inputMessage.trim();
+    const timestamp = Date.now();
 
     const message = {
-      toUserId: '999',
-      content: this.data.inputMessage,
+      toUserId: '999', // 客服ID
+      content: messageContent,
       userId: this.data.userId,
-      timestamp: Date.now()
-    }
+      timestamp: timestamp,
+      type: 'text'  // 可以添加消息类型
+    };
 
-    // 发送消息到服务器
     wx.sendSocketMessage({
       data: JSON.stringify(message),
       success: () => {
-        // 添加消息到列表
-        this.addMessage({
+        // 先添加到本地消息列表
+        const newMessage = {
+          id: timestamp,
           type: 'send',
-          content: this.data.inputMessage,
+          content: messageContent,
           time: this.formatTime(new Date())
-        })
-        // 清空输入框
-        this.setData({ inputMessage: '' })
+        };
+
+        const updatedMessages = [...this.data.messages, newMessage];
+        this.setData({
+          messages: updatedMessages,
+          savedMessages: updatedMessages,
+          inputMessage: '',
+          lastMessageId: `msg-${newMessage.id}`
+        }, () => {
+          // 滚动到最新消息
+          wx.createSelectorQuery()
+            .select('.message-list')
+            .node()
+            .exec((res) => {
+              const scrollView = res[0].node;
+              scrollView.scrollTo({
+                top: scrollView.scrollHeight,
+                behavior: 'smooth'
+              });
+            });
+        });
       },
-      fail: () => {
+      fail: (error) => {
+        console.error('发送消息失败：', error);
         wx.showToast({
           title: '发送失败，请重试',
           icon: 'none'
-        })
+        });
       }
-    })
+    });
   },
 
   // 输入框内容变化事件
@@ -224,9 +276,11 @@ Page({
 
   // 格式化时间
   formatTime: function (date) {
+    const month = date.getMonth() + 1
+    const day = date.getDate()
     const hour = date.getHours()
     const minute = date.getMinutes()
-    return `${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}`
+    return `${month}月${day}日 ${hour < 10 ? '0' + hour : hour}:${minute < 10 ? '0' + minute : minute}`
   },
 
   // 添加加载历史消息的方法
@@ -283,5 +337,32 @@ Page({
         })
       }
     })
+  },
+
+  checkLogin() {
+    if (!app.checkLoginStatus()) {
+      this.setData({
+        showLoginPopup: true
+      })
+    }
+  },
+
+  onLoginPopupClose() {
+    this.setData({
+      showLoginPopup: false
+    })
+  },
+
+  onLoginSuccess() {
+    this.setData({
+      showLoginPopup: false
+    })
+    this.initPage()
+  },
+
+  initPage() {
+    // 初始化页面数据
+    this.loadHistoryMessages()
+    this.connectSocket()
   }
 })

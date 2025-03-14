@@ -17,7 +17,7 @@
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {
-    "login": "/components/login/login"
+    "login-popup": "/components/login-popup/login-popup"
   },
   "tabBar": {
     "color": "#999999",
