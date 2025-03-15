@@ -290,7 +290,8 @@ Page({
 
   // 添加加载历史消息的方法
   loadHistoryMessages: function (page = 1, size = 5) {
-    const that = this
+		const that = this
+		const token = wx.getStorageSync('token')
     wx.request({
       url: 'http://localhost:8080/chat',
       method: 'GET',
@@ -299,6 +300,13 @@ Page({
         userId2: '999',
         page: page,
         size: size
+			},
+			header: {
+
+        'Content-Type': 'application/json',
+
+        'token': token || ''
+
       },
       success: function (res) {
         if (res.data.code === 200 && res.data.data.records) {

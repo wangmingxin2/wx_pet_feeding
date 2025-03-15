@@ -3,16 +3,19 @@ import request from '../../utils/request'
 
 Page({
   data: {
-    userInfo: {}
+    userInfo: {},
+    pets: []
   },
 
   onLoad() {
     this.fetchUserInfo()
+    this.fetchPetList()
   },
 
   onShow() {
     if (app.globalData.isLoggedIn) {
       this.fetchUserInfo()
+      this.fetchPetList()
     }
   },
 
@@ -59,6 +62,45 @@ Page({
     })
   },
 
+  fetchPetList() {
+    const userId = wx.getStorageSync('userId')
+    if (!userId) return
+
+    console.log('开始获取宠物列表，userId:', userId)
+
+    request({
+      url: `/pet/listByUserId/${userId}`,
+      method: 'GET'
+    }).then(res => {
+      if (res.code === 200) {
+        this.setData({
+          pets: res.data.map(pet => ({
+            ...pet,
+            weight: pet.weight ? Number(pet.weight).toFixed(1) : '0.0'
+          }))
+        })
+        console.log('宠物列表获取成功：', res.data)
+      } else {
+        console.error('获取宠物列表失败，返回码：', res.code, '错误信息：', res.msg)
+        wx.showToast({
+          title: res.msg || '获取宠物列表失败',
+          icon: 'none'
+        })
+      }
+    }).catch(err => {
+      console.error('获取宠物列表失败：', {
+        error: err,
+        response: err.data,
+        statusCode: err.statusCode,
+        url: `/pet/listByUserId/${userId}`
+      })
+      wx.showToast({
+        title: '获取宠物列表失败，请稍后重试',
+        icon: 'none'
+      })
+    })
+  },
+
   onTapOrders() {
     wx.navigateTo({
       url: '/pages/orders/orders'
@@ -74,6 +116,19 @@ Page({
   onTapSettings() {
     wx.navigateTo({
       url: '/pages/settings/settings'
+    })
+  },
+
+  onTapViewAllPets() {
+    wx.navigateTo({
+      url: '/pages/pets/pets'
+    })
+  },
+
+  onTapPetDetail(e) {
+    const pet = e.currentTarget.dataset.pet
+    wx.navigateTo({
+      url: `/pages/pets/detail?id=${pet.id}`
     })
   }
 }) 

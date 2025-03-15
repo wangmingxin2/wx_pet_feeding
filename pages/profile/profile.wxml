@@ -50,6 +50,38 @@
     </view>
   </view>
 
+  <!-- 在资产信息卡片后面添加宠物列表卡片 -->
+  <view class="pets-container">
+    <view class="pets-header">
+      <text class="pets-title">我的宠物</text>
+      <view class="view-all" bindtap="onTapViewAllPets">
+        <text>查看全部</text>
+        <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+      </view>
+    </view>
+    
+    <scroll-view class="pets-list" scroll-x="true" enhanced="true" show-scrollbar="false">
+      <view class="pet-cards">
+        <block wx:for="{{pets}}" wx:key="id">
+          <view class="pet-card" bindtap="onTapPetDetail" data-pet="{{item}}">
+            <image class="pet-image" src="{{item.imageUrl || '/images/default-pet.png'}}" mode="aspectFill"></image>
+            <view class="pet-info">
+              <view class="pet-name-row">
+                <text class="pet-name">{{item.name}}</text>
+                <text class="pet-age">{{item.age}}岁</text>
+              </view>
+              <view class="pet-details">
+                <text class="pet-breed">{{item.breed}}</text>
+                <text class="pet-weight">{{item.weight}}kg</text>
+              </view>
+              <text class="pet-type">{{item.type}}</text>
+            </view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+  </view>
+
   <!-- 功能列表 -->
   <view class="function-list">
     <view class="function-item" bindtap="onTapOrders">

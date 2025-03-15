@@ -38,6 +38,7 @@ Component({
               .then(result => {
                 if (result.code === 200) {
                   const userInfo = result.data
+                  console.log('登录返回的token:', userInfo.token)
                   getApp().setLoginSuccess(userInfo)
                   this.triggerEvent('login-success', userInfo)
 
