@@ -1,0 +1,59 @@
+<view class="pets-page">
+  <!-- 顶部栏 -->
+  <view class="header">
+    <view class="left">
+      <image class="back-icon" src="/images/icons/back.png" bindtap="onTapBack"></image>
+      <text class="title">我的宠物</text>
+    </view>
+    <button class="add-btn" bindtap="onTapAdd">
+      <image class="add-icon" src="/images/icons/add.png"></image>
+      <text>新增宠物</text>
+    </button>
+  </view>
+
+  <!-- 宠物列表 -->
+  <view class="pets-list">
+    <block wx:for="{{pets}}" wx:key="id">
+      <view class="pet-card">
+        <view class="pet-info" bindtap="onTapPetDetail" data-pet="{{item}}">
+          <image class="pet-image" src="{{item.imageUrl || '/images/default-pet.png'}}" mode="aspectFill"></image>
+          <view class="pet-details">
+            <view class="pet-header">
+              <text class="pet-name">{{item.name}}</text>
+              <text class="pet-age">{{item.age}}岁</text>
+            </view>
+            <view class="pet-row">
+              <text class="label">品种：</text>
+              <text class="value">{{item.breed}}</text>
+            </view>
+            <view class="pet-row">
+              <text class="label">类型：</text>
+              <text class="value">{{item.type}}</text>
+            </view>
+            <view class="pet-row">
+              <text class="label">体重：</text>
+              <text class="value">{{item.weight}}kg</text>
+            </view>
+          </view>
+        </view>
+        <view class="pet-actions">
+          <button class="action-btn edit" bindtap="onTapEdit" data-pet="{{item}}">
+            <image class="btn-icon" src="/images/icons/edit.png"></image>
+            <text>编辑</text>
+          </button>
+          <button class="action-btn delete" bindtap="onTapDelete" data-pet="{{item}}">
+            <image class="btn-icon" src="/images/icons/delete.png"></image>
+            <text>删除</text>
+          </button>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!pets.length}}">
+    <image class="empty-icon" src="/images/icons/empty-pets.png"></image>
+    <text>还没有添加宠物哦</text>
+    <button class="add-pet-btn" bindtap="onTapAdd">添加宠物</button>
+  </view>
+</view> 

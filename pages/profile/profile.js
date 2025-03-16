@@ -120,6 +120,7 @@ Page({
   },
 
   onTapViewAllPets() {
+    console.log('onTapViewAllPets');
     wx.navigateTo({
       url: '/pages/pets/pets'
     })

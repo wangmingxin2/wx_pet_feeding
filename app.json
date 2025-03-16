@@ -3,7 +3,9 @@
     "pages/index/index",
     "pages/customer-service/customer-service",
     "pages/profile/profile",
-    "pages/services/services"
+    "pages/services/services",
+    "pages/pets/pets",
+    "pages/pets/edit-pet"
   ],
   "window": {
     "backgroundTextStyle": "light",

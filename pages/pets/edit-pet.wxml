@@ -1,0 +1,86 @@
+<view class="edit-pet-page">
+  <!-- 顶部栏 -->
+  <view class="header">
+    <view class="left">
+      <image class="back-icon" src="/images/icons/back.png" bindtap="onTapBack"></image>
+      <text class="title">{{isEdit ? '编辑宠物' : '新增宠物'}}</text>
+    </view>
+    <button class="save-btn" bindtap="onTapSave">保存</button>
+  </view>
+
+  <!-- 表单内容 -->
+  <view class="form-container">
+    <!-- 宠物图片 -->
+    <view class="upload-section">
+      <image 
+        class="pet-image" 
+        src="{{formData.imageUrl || '/images/default-pet.png'}}" 
+        mode="aspectFill"
+        bindtap="onTapImage"
+      ></image>
+      <text class="upload-tip">点击更换图片</text>
+    </view>
+
+    <!-- 表单项 -->
+    <view class="form-group">
+      <view class="form-item">
+        <text class="label">名称</text>
+        <input 
+          class="input" 
+          value="{{formData.name}}" 
+          placeholder="请输入宠物名称"
+          bindinput="onInputChange"
+          data-field="name"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">类型</text>
+        <picker 
+          bindchange="onTypeChange" 
+          value="{{typeIndex}}" 
+          range="{{petTypes}}"
+        >
+          <view class="picker">
+            {{formData.type || '请选择宠物类型'}}
+          </view>
+        </picker>
+      </view>
+
+      <view class="form-item">
+        <text class="label">品种</text>
+        <input 
+          class="input" 
+          value="{{formData.breed}}" 
+          placeholder="请输入宠物品种"
+          bindinput="onInputChange"
+          data-field="breed"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">年龄</text>
+        <input 
+          class="input" 
+          type="number"
+          value="{{formData.age}}" 
+          placeholder="请输入宠物年龄"
+          bindinput="onInputChange"
+          data-field="age"
+        />
+      </view>
+
+      <view class="form-item">
+        <text class="label">体重(kg)</text>
+        <input 
+          class="input" 
+          type="digit"
+          value="{{formData.weight}}" 
+          placeholder="请输入宠物体重"
+          bindinput="onInputChange"
+          data-field="weight"
+        />
+      </view>
+    </view>
+  </view>
+</view> 
