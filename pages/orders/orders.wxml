@@ -1,0 +1,108 @@
+<view class="orders-page">
+  <!-- 顶部栏 -->
+  <view class="header">
+    <view class="left">
+      <image class="back-icon" src="/images/icons/back.png" bindtap="onTapBack"></image>
+      <text class="title">我的订单</text>
+    </view>
+  </view>
+
+  <!-- 状态切换栏 -->
+  <view class="status-bar">
+    <view 
+      class="status-item {{currentStatus === status.value ? 'active' : ''}}" 
+      wx:for="{{statusList}}" 
+      wx:key="value"
+      wx:for-item="status"
+      bindtap="onTapStatus"
+      data-status="{{status.value}}"
+    >
+      <text>{{status.label}}</text>
+      <view class="status-line" wx:if="{{currentStatus === status.value}}"></view>
+    </view>
+  </view>
+
+  <!-- 订单列表 -->
+  <scroll-view 
+    class="order-list" 
+    scroll-y="true" 
+    bindscrolltolower="onLoadMore"
+    refresher-enabled="{{true}}"
+    refresher-triggered="{{isRefreshing}}"
+    bindrefresherrefresh="onRefresh"
+  >
+    <block wx:for="{{orders}}" wx:key="orderId">
+      <view class="order-card">
+        <view class="order-header">
+          <text class="order-time">{{item.createdTime}}</text>
+          <text class="order-status status-{{item.orderStatus}}">{{item.orderStatusText}}</text>
+        </view>
+
+        <view class="order-content">
+          <view class="service-info">
+            <text class="service-name">{{item.serviceName}}</text>
+            <text class="provider-name">服务人员：{{item.serviceProviderName}}</text>
+          </view>
+
+          <view class="pet-info">
+            <text class="label">宠物名称：</text>
+            <text class="value">{{item.petName}}</text>
+          </view>
+
+          <view class="schedule-info">
+            <text class="label">预约时间：</text>
+            <text class="value">{{item.scheduledTime}}</text>
+          </view>
+
+          <!-- 已完成状态显示完成时间 -->
+          <block wx:if="{{item.orderStatus === '3'}}">
+            <view class="schedule-info">
+              <text class="label">完成时间：</text>
+              <text class="value">{{item.completedTime}}</text>
+            </view>
+          </block>
+
+          <view class="price-info">
+            <text class="amount">￥{{item.orderAmount}}</text>
+          </view>
+        </view>
+
+        <view class="order-footer">
+          <view class="order-actions">
+            <!-- 待处理状态显示取消按钮 -->
+            <block wx:if="{{item.orderStatus === '2'}}">
+              <button 
+                class="action-btn cancel" 
+                bindtap="onTapCancel" 
+                data-order="{{item}}"
+              >取消订单</button>
+            </block>
+            
+            <!-- 所有订单都显示售后按钮 -->
+            <button 
+              class="action-btn service" 
+              bindtap="onTapService" 
+              data-order="{{item}}"
+            >售后服务</button>
+          </view>
+        </view>
+      </view>
+    </block>
+
+    <!-- 加载更多 -->
+    <view class="loading-more" wx:if="{{hasMore}}">
+      <text>加载中...</text>
+    </view>
+
+    <!-- 没有更多数据 -->
+    <view class="no-more" wx:if="{{!hasMore && orders.length > 0}}">
+      <text>没有更多订单了</text>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{!orders.length}}">
+      <image class="empty-icon" src="/images/icons/empty-orders.png"></image>
+      <text>暂无相关订单</text>
+    </view>
+  </scroll-view>
+</view> 
