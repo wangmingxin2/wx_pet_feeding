@@ -70,7 +70,7 @@
         <view class="order-footer">
           <view class="order-actions">
             <!-- 待处理状态显示取消按钮 -->
-            <block wx:if="{{item.orderStatus === '2'}}">
+            <block wx:if="{{item.orderStatus === '1'}}">
               <button 
                 class="action-btn cancel" 
                 bindtap="onTapCancel" 

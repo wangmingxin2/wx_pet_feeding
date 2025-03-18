@@ -90,8 +90,8 @@
       <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
     </view>
     <view class="function-item" bindtap="onTapAddress">
-      <image class="function-icon" src="/images/icons/address.png"></image>
-      <text class="function-text">收货地址</text>
+      <image class="function-icon" src="/images/icons/user-edit.png"></image>
+      <text class="function-text">个人信息</text>
       <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
     </view>
     <view class="function-item" bindtap="onTapSettings">

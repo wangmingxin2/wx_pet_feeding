@@ -109,7 +109,7 @@ Page({
 
   onTapAddress() {
     wx.navigateTo({
-      url: '/pages/address/address'
+      url: '/pages/profile/edit-info'
     })
   },
 

@@ -6,7 +6,8 @@
     "pages/services/services",
     "pages/pets/pets",
     "pages/pets/edit-pet",
-    "pages/orders/orders"
+    "pages/orders/orders",
+    "pages/profile/edit-info"
   ],
   "window": {
     "backgroundTextStyle": "light",

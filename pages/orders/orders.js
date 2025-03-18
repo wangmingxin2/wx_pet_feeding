@@ -5,8 +5,8 @@ Page({
   data: {
     statusList: [
       { label: '全部', value: '' },
-      { label: '待处理', value: 2 },
-      { label: '已确认', value: 1 },
+      { label: '待处理', value: 1 },
+      { label: '已确认', value: 2 },
       { label: '已完成', value: 3 },
       { label: '已取消', value: 4 }
     ],
@@ -36,8 +36,8 @@ Page({
 
   getStatusText(status) {
     switch (Number(status)) {
-      case 1: return '已确认'
-      case 2: return '待处理'
+      case 1: return '待处理'
+      case 2: return '已确认'
       case 3: return '已完成'
       case 4: return '已取消'
       default: return '未知状态'
@@ -97,7 +97,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           request({
-            url: `/order/cancelByOrderId/${order.orderId}`,
+            url: `/order/cancel/${order.orderId}`,
             method: 'PUT'
           }).then(res => {
             if (res.code === 200) {
