@@ -1,5 +1,26 @@
-<view class="container">
+<view class="services-page">
+  <!-- 顶部栏 -->
+  <view class="header">
+    <text class="title">服务列表</text>
+  </view>
+
+  <!-- 服务列表 -->
   <view class="service-list">
-    <!-- 服务列表将在这里展示 -->
+    <block wx:for="{{services}}" wx:key="serviceId">
+      <view class="service-card" bindtap="onTapService" data-service="{{item}}">
+        <image 
+          class="service-icon" 
+          src="{{item.imageUrl}}" 
+          mode="aspectFit"
+        ></image>
+        <text class="service-name">{{item.name}}</text>
+        <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+      </view>
+    </block>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{!services.length}}">
+    <text>暂无可用服务</text>
   </view>
 </view> 
