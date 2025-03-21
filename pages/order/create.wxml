@@ -11,9 +11,16 @@
   <view class="service-info">
     <view class="service-header">
       <text class="service-name">{{service.name}}</text>
-      <text class="service-price">￥{{service.price}}</text>
+      <view class="price-info">
+        <text class="original-price">￥{{service.price}}</text>
+        <text class="discount-price">￥{{discountPrice}}</text>
+      </view>
     </view>
     <text class="service-desc">{{service.description}}</text>
+    <view class="discount-tip">
+      <text class="discount-label">会员折扣：</text>
+      <text class="discount-value">{{userDiscount}}折</text>
+    </view>
   </view>
 
   <!-- 表单内容 -->
@@ -71,8 +78,11 @@
   <!-- 底部提交区 -->
   <view class="footer">
     <view class="price-section">
-      <text class="label">总计：</text>
-      <text class="total-price">￥{{service.price}}</text>
+      <view class="price-detail">
+        <text class="original-price">￥{{service.price}}</text>
+        <text class="total-price">￥{{discountPrice}}</text>
+      </view>
+      <text class="discount-text">已优惠￥{{savedAmount}}</text>
     </view>
     <button class="submit-btn" bindtap="onTapSubmit">提交订单</button>
   </view>

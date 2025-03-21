@@ -13,6 +13,9 @@ Page({
     timeArray: [],
     timeIndex: [0, 0, 0],
     selectedTime: '',
+    discountPrice: 0,
+    userDiscount: 10,  // 用户折扣，默认10折
+    savedAmount: 0
   },
 
   onLoad(options) {
@@ -21,6 +24,7 @@ Page({
       this.fetchPets()
       this.fetchProviders()
       this.initTimeArray()
+      this.fetchUserDiscount()  // 获取用户折扣信息
     }
   },
 
@@ -30,7 +34,10 @@ Page({
       method: 'GET'
     }).then(res => {
       if (res.code === 200) {
-        this.setData({ service: res.data })
+        this.setData({ service: res.data }, () => {
+          // 设置服务信息后计算折扣价
+          this.calculateDiscountPrice()
+        })
       }
     })
   },
@@ -155,7 +162,7 @@ Page({
       serviceId: this.data.service.serviceId,
       petId: this.data.selectedPet.petId,
       serviceProviderId: this.data.selectedProvider.serviceProviderId,
-      orderAmount: this.data.service.price,
+      orderAmount: Number(this.data.discountPrice),  // 使用折扣后的价格
       orderStatus: '1',
       scheduledTime: this.formatScheduledTime()
     }
@@ -201,5 +208,38 @@ Page({
 
   onTapBack() {
     wx.navigateBack()
+  },
+
+  // 获取用户折扣信息
+  fetchUserDiscount() {
+    const userId = wx.getStorageSync('userId')
+    request({
+      url: `/user/${userId}`,
+      method: 'GET'
+    }).then(res => {
+      if (res.code === 200 && res.data) {
+        const discount = res.data.discountRate * 10  // 转换为几折
+        this.setData({
+          userDiscount: discount
+        })
+        // 如果服务价格已经获取到，计算折扣价
+        if (this.data.service.price) {
+          this.calculateDiscountPrice()
+        }
+      }
+    })
+  },
+
+  // 计算折扣价格
+  calculateDiscountPrice() {
+    const originalPrice = this.data.service.price
+    const discount = this.data.userDiscount / 10
+    const discountPrice = (originalPrice * discount).toFixed(2)
+    const savedAmount = (originalPrice - discountPrice).toFixed(2)
+
+    this.setData({
+      discountPrice,
+      savedAmount
+    })
   }
 }) 
