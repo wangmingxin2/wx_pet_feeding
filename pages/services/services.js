@@ -20,6 +20,7 @@ Page({
       method: 'POST'
     }).then(res => {
       if (res.code === 200) {
+        console.log(res.data);
         this.setData({
           services: res.data
         })
@@ -37,6 +38,7 @@ Page({
 
   onTapService(e) {
     const service = e.currentTarget.dataset.service
+    console.log('点击的服务：', service)
     wx.navigateTo({
       url: `/pages/order/create?serviceId=${service.serviceId}`
     })

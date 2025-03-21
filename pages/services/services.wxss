@@ -41,8 +41,8 @@
 }
 
 .service-icon {
-  width: 120rpx;
-  height: 120rpx;
+  width: 140rpx;
+  height: 140;
   margin-bottom: 0;
 }
 
@@ -50,14 +50,6 @@
   font-size: 28rpx;
   color: #333;
   text-align: center;
-}
-
-.arrow-icon {
-  width: 32rpx;
-  height: 32rpx;
-  position: absolute;
-  bottom: 20rpx;
-  right: 20rpx;
 }
 
 .service-price,

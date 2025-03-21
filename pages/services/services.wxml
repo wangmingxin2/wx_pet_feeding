@@ -14,7 +14,6 @@
           mode="aspectFit"
         ></image>
         <text class="service-name">{{item.name}}</text>
-        <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
       </view>
     </block>
   </view>

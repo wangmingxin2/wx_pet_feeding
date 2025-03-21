@@ -1,0 +1,79 @@
+<view class="order-page">
+  <!-- 顶部栏 -->
+  <view class="header">
+    <view class="left">
+      <image class="back-icon" src="/images/icons/back.png" bindtap="onTapBack"></image>
+      <text class="title">预约服务</text>
+    </view>
+  </view>
+
+  <!-- 服务信息 -->
+  <view class="service-info">
+    <view class="service-header">
+      <text class="service-name">{{service.name}}</text>
+      <text class="service-price">￥{{service.price}}</text>
+    </view>
+    <text class="service-desc">{{service.description}}</text>
+  </view>
+
+  <!-- 表单内容 -->
+  <view class="form-container">
+    <!-- 选择宠物 -->
+    <view class="form-item">
+      <text class="label">选择宠物</text>
+      <picker 
+        bindchange="onPetChange" 
+        value="{{petIndex}}" 
+        range="{{pets}}" 
+        range-key="name"
+      >
+        <view class="picker">
+          {{selectedPet ? selectedPet.name : '请选择宠物'}}
+          <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 选择服务人员 -->
+    <view class="form-item">
+      <text class="label">服务人员</text>
+      <picker 
+        bindchange="onProviderChange" 
+        value="{{providerIndex}}" 
+        range="{{providers}}" 
+        range-key="name"
+      >
+        <view class="picker">
+          {{selectedProvider ? selectedProvider.name : '请选择服务人员'}}
+          <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+        </view>
+      </picker>
+    </view>
+
+    <!-- 选择预约时间 -->
+    <view class="form-item">
+      <text class="label">预约时间</text>
+      <picker 
+        mode="multiSelector" 
+        bindchange="onTimeChange"
+        bindcolumnchange="onTimeColumnChange" 
+        value="{{timeIndex}}" 
+        range="{{timeArray}}"
+      >
+        <view class="picker">
+          {{selectedTime || '请选择预约时间'}}
+          <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 底部提交区 -->
+  <view class="footer">
+    <view class="price-section">
+      <text class="label">总计：</text>
+      <text class="total-price">￥{{service.price}}</text>
+    </view>
+    <button class="submit-btn" bindtap="onTapSubmit">提交订单</button>
+  </view>
+</view> 
