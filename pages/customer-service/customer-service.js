@@ -23,59 +23,21 @@ Page({
     const userId = wx.getStorageSync('userId')
     if (userId) {
       this.setData({ userId: userId })
-    }
-
-    this.checkLogin()
-    if (app.globalData.isLoggedIn) {
-      // 先移除可能存在的旧监听器
-      wx.closeSocket()
-      wx.onSocketClose(() => {
-        console.log('旧连接已关闭')
-      })
       this.initPage()
     }
   },
 
   onShow: function () {
-    // 页面显示时，恢复保存的消息
-    if (this.data.savedMessages.length > 0) {
-      this.setData({
-        messages: this.data.savedMessages
-      })
-    }
-    // 检查WebSocket连接状态并重新连接
-    wx.getNetworkType({
-      success: (result) => {
-        if (result.networkType !== 'none') {
-          // 检查WebSocket当前状态
-          if (!this.data.socketOpen) {
-            console.log('检测到WebSocket未连接，正在重新连接...')
-            this.connectSocket()
-          } else {
-            // 修改心跳包格式
-            const heartbeat = {
-              toUserId: '999',  // 客服ID
-              content: 'ping',
-              type: 'heartbeat',
-              userId: this.data.userId
-            }
-            wx.sendSocketMessage({
-              data: JSON.stringify(heartbeat),
-              fail: () => {
-                console.log('心跳包发送失败，重新建立连接')
-                this.setData({ socketOpen: false })
-                this.connectSocket()
-              }
-            })
-          }
-        } else {
-          wx.showToast({
-            title: '网络连接不可用',
-            icon: 'none'
-          })
-        }
+    const userId = wx.getStorageSync('userId')
+    if (userId) {
+      // 已登录才执行这些操作
+      if (this.data.savedMessages.length > 0) {
+        this.setData({
+          messages: this.data.savedMessages
+        })
       }
-    })
+      this.checkWebSocketConnection()
+    }
   },
 
   onHide: function () {
@@ -398,5 +360,37 @@ Page({
     // 初始化页面数据
     this.loadHistoryMessages()
     this.connectSocket()
+  },
+
+  checkWebSocketConnection() {
+    wx.getNetworkType({
+      success: (result) => {
+        if (result.networkType !== 'none' && this.data.userId) {
+          if (!this.data.socketOpen) {
+            console.log('检测到WebSocket未连接，正在重新连接...')
+            this.connectSocket()
+          } else {
+            this.sendHeartbeat()
+          }
+        }
+      }
+    })
+  },
+
+  sendHeartbeat() {
+    const heartbeat = {
+      toUserId: '999',  // 客服ID
+      content: 'ping',
+      type: 'heartbeat',
+      userId: this.data.userId
+    }
+    wx.sendSocketMessage({
+      data: JSON.stringify(heartbeat),
+      fail: () => {
+        console.log('心跳包发送失败，重新建立连接')
+        this.setData({ socketOpen: false })
+        this.connectSocket()
+      }
+    })
   }
 })

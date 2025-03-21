@@ -110,18 +110,36 @@ Page({
     })
   },
   navigateToOrders() {
-    wx.switchTab({
+    if (!app.checkLoginStatus()) {
+      this.setData({
+        showLoginPopup: true
+      })
+      return
+    }
+    wx.navigateTo({
       url: '/pages/orders/orders'
     })
   },
   navigateToCatFeeding() {
+    if (!app.checkLoginStatus()) {
+      this.setData({
+        showLoginPopup: true
+      })
+      return
+    }
     wx.navigateTo({
-      url: '/pages/services/cat-feeding/index'
+      url: '/pages/order/create?serviceId=1'
     })
   },
   navigateToDogFeeding() {
+    if (!app.checkLoginStatus()) {
+      this.setData({
+        showLoginPopup: true
+      })
+      return
+    }
     wx.navigateTo({
-      url: '/pages/services/dog-feeding/index'
+      url: '/pages/order/create?serviceId=5'
     })
   },
   navigateToMembership() {

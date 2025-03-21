@@ -38,11 +38,11 @@
       <view class="card-section">
         <view class="service-item" bindtap="navigateToCatFeeding">
           <image src="/images/icons/cat.png" class="service-icon"/>
-          <text>上门喂猫</text>
+          <text>宠物喂养</text>
         </view>
         <view class="service-item" bindtap="navigateToDogFeeding">
           <image src="/images/icons/dog.png" class="service-icon"/>
-          <text>上门喂狗</text>
+          <text>宠物散步</text>
         </view>
         <view class="service-item" bindtap="navigateToMembership">
           <image src="/images/icons/vip.png" class="service-icon"/>
