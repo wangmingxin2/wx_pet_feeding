@@ -122,6 +122,17 @@ Page({
     };
     this.addMessage(userMessage);
 
+    // 添加思考中的消息
+    const thinkingId = Date.now() + 1;
+    const thinkingMessage = {
+      id: thinkingId,
+      type: 'ai',
+      content: '',
+      time: this.formatTime(new Date()),
+      isThinking: true
+    };
+    this.addMessage(thinkingMessage);
+
     // 调用AI接口
     wx.request({
       url: 'http://localhost:8080/ai/chat',
@@ -132,15 +143,26 @@ Page({
       },
       success: (res) => {
         if (res.data.code === 200) {
-          // 添加AI回复到列表
+          // 移除思考中的消息，添加AI回复
           const aiMessage = {
-            id: Date.now() + 1,
+            id: thinkingId,
             type: 'ai',
             content: res.data.data.response,
-            time: this.formatTime(new Date())
+            time: this.formatTime(new Date()),
+            isThinking: false
           };
-          this.addMessage(aiMessage);
+          // 替换思考中的消息
+          this.replaceThinkingMessage(thinkingId, aiMessage);
         } else {
+          // 请求失败，更新思考中消息为错误消息
+          this.replaceThinkingMessage(thinkingId, {
+            id: thinkingId,
+            type: 'ai',
+            content: '抱歉，我遇到了问题，请稍后再试。',
+            time: this.formatTime(new Date()),
+            isThinking: false
+          });
+
           wx.showToast({
             title: res.data.message || '请求失败',
             icon: 'none'
@@ -148,6 +170,15 @@ Page({
         }
       },
       fail: (error) => {
+        // 请求失败，更新思考中消息为错误消息
+        this.replaceThinkingMessage(thinkingId, {
+          id: thinkingId,
+          type: 'ai',
+          content: '网络连接失败，请检查网络后重试。',
+          time: this.formatTime(new Date()),
+          isThinking: false
+        });
+
         wx.showToast({
           title: '网络错误，请重试',
           icon: 'none'
@@ -156,6 +187,21 @@ Page({
       complete: () => {
         this.setData({ isLoading: false });
       }
+    });
+  },
+
+  // 替换思考中的消息
+  replaceThinkingMessage: function (thinkingId, newMessage) {
+    const messages = this.data.messages.map(msg => {
+      if (msg.id === thinkingId) {
+        return newMessage;
+      }
+      return msg;
+    });
+
+    this.setData({
+      messages: messages,
+      lastMessageId: `msg-${newMessage.id}`
     });
   },
 

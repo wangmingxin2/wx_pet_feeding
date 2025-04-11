@@ -178,3 +178,46 @@
     transform: rotate(360deg);
   }
 }
+
+/* 思考中动画样式 */
+.thinking-dots {
+  display: flex;
+  padding: 15rpx 10rpx;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.dot {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  background-color: #999999;
+  animation: dotFlashing 1.5s infinite alternate;
+}
+
+.dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes dotFlashing {
+  0% {
+    background-color: #cccccc;
+    transform: scale(0.8);
+  }
+  50% {
+    background-color: #666666;
+    transform: scale(1);
+  }
+  100% {
+    background-color: #333333;
+    transform: scale(0.8);
+  }
+}

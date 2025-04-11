@@ -23,7 +23,16 @@
       <view class="message-item {{item.type === 'user' ? 'user' : 'ai'}}" id="msg-{{item.id}}">
         <image class="avatar" src="{{item.type === 'user' ? userAvatar : aiAvatar}}" mode="aspectFill"></image>
         <view class="message-content">
-          <text class="message-text">{{item.content}}</text>
+          <block wx:if="{{item.isThinking}}">
+            <view class="thinking-dots">
+              <view class="dot"></view>
+              <view class="dot"></view>
+              <view class="dot"></view>
+            </view>
+          </block>
+          <block wx:else>
+            <text class="message-text">{{item.content}}</text>
+          </block>
           <text class="message-time">{{item.time}}</text>
         </view>
       </view>
