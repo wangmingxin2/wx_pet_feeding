@@ -1,4 +1,8 @@
 <view class="chat-container">
+  <view class="back-button" bindtap="onTapBack">
+    <image src="/images/icons/back.png" mode="aspectFit"></image>
+  </view>
+  
   <view class="chat-header">
     <text class="title">在线客服</text>
   </view>

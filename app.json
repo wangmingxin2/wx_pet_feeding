@@ -8,7 +8,9 @@
     "pages/pets/edit-pet",
     "pages/orders/orders",
     "pages/profile/edit-info",
-    "pages/order/create"
+    "pages/order/create",
+    "pages/customer-service-nav/customer-service-nav",
+    "pages/ai-service/ai-service"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -33,26 +35,26 @@
       {
         "pagePath": "pages/index/index",
         "text": "首页",
-        "iconPath": "/images/tabbar/home.png",
-        "selectedIconPath": "/images/tabbar/home-active.png"
+        "iconPath": "images/tabbar/home.png",
+        "selectedIconPath": "images/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/services/services",
         "text": "服务",
-        "iconPath": "/images/tabbar/service.png",
-        "selectedIconPath": "/images/tabbar/service-active.png"
+        "iconPath": "images/tabbar/service.png",
+        "selectedIconPath": "images/tabbar/service-active.png"
       },
       {
-        "pagePath": "pages/customer-service/customer-service",
+        "pagePath": "pages/customer-service-nav/customer-service-nav",
         "text": "客服",
-        "iconPath": "/images/tabbar/customer-service.png",
-        "selectedIconPath": "/images/tabbar/customer-service.png"
+        "iconPath": "images/tabbar/customer-service.png",
+        "selectedIconPath": "images/tabbar/customer-service.png"
       },
       {
         "pagePath": "pages/profile/profile",
         "text": "我的",
-        "iconPath": "/images/tabbar/user.png",
-        "selectedIconPath": "/images/tabbar/user-active.png"
+        "iconPath": "images/tabbar/user.png",
+        "selectedIconPath": "images/tabbar/user-active.png"
       }
     ]
   }

@@ -1,0 +1,74 @@
+<view class="cs-nav-container">
+  <!-- 顶部背景 -->
+  <view class="nav-header">
+    <image class="header-bg" src="/images/cs-bg.jpg" mode="aspectFill"></image>
+    <view class="header-content">
+      <text class="title">客服中心</text>
+      <text class="subtitle">我们随时为您提供帮助</text>
+    </view>
+  </view>
+
+  <!-- 客服选项卡片 -->
+  <view class="service-options">
+    <view class="service-card" bindtap="navigateToHumanService">
+      <view class="card-content">
+        <image class="service-icon" src="/images/icons/human-cs.png" mode="aspectFit"></image>
+        <view class="service-info">
+          <text class="service-title">人工客服</text>
+          <text class="service-desc">与专业客服人员实时沟通</text>
+        </view>
+      </view>
+      <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+    </view>
+
+    <view class="service-card" bindtap="navigateToAIService">
+      <view class="card-content">
+        <image class="service-icon" src="/images/icons/ai-cs.png" mode="aspectFit"></image>
+        <view class="service-info">
+          <text class="service-title">AI智能客服</text>
+          <text class="service-desc">快速解答常见问题</text>
+        </view>
+      </view>
+      <image class="arrow-icon" src="/images/icons/arrow-right.png"></image>
+    </view>
+  </view>
+
+  <!-- 客服介绍 -->
+  <view class="service-intro">
+    <view class="intro-title">
+      <view class="title-line"></view>
+      <text>服务说明</text>
+      <view class="title-line"></view>
+    </view>
+    
+    <view class="intro-content">
+      <view class="intro-item">
+        <image class="intro-icon" src="/images/icons/clock.png"></image>
+        <view class="intro-text">
+          <text class="intro-subtitle">服务时间</text>
+          <text class="intro-desc">人工客服：周一至周日 9:00-21:00</text>
+          <text class="intro-desc">AI客服：全天候24小时服务</text>
+        </view>
+      </view>
+
+      <view class="intro-item">
+        <image class="intro-icon" src="/images/icons/service-type.png"></image>
+        <view class="intro-text">
+          <text class="intro-subtitle">服务内容</text>
+          <text class="intro-desc">· 订单查询与售后</text>
+          <text class="intro-desc">· 宠物喂养咨询</text>
+          <text class="intro-desc">· 会员服务咨询</text>
+          <text class="intro-desc">· 投诉与建议</text>
+        </view>
+      </view>
+
+      <view class="intro-item">
+        <image class="intro-icon" src="/images/icons/tips.png"></image>
+        <view class="intro-text">
+          <text class="intro-subtitle">温馨提示</text>
+          <text class="intro-desc">为了更好地解决您的问题，请提供相关订单号或详细描述您的问题，我们将竭诚为您服务。</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

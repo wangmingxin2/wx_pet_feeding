@@ -1,0 +1,51 @@
+<view class="chat-container">
+  <!-- 头部 -->
+  <view class="chat-header">
+    <view class="header-left" bindtap="onTapBack">
+      <image class="back-icon" src="/images/icons/back.png" mode="aspectFit"></image>
+    </view>
+    <view class="header-title">AI客服助手</view>
+    <view class="header-right" bindtap="clearChat">
+      <text class="clear-text">清空</text>
+    </view>
+  </view>
+
+  <!-- 消息列表 -->
+  <scroll-view 
+    class="message-list" 
+    scroll-y="true" 
+    scroll-into-view="{{lastMessageId}}"
+    scroll-with-animation="true"
+    enhanced="true"
+    show-scrollbar="false"
+  >
+    <block wx:for="{{messages}}" wx:key="id">
+      <view class="message-item {{item.type === 'user' ? 'user' : 'ai'}}" id="msg-{{item.id}}">
+        <image class="avatar" src="{{item.type === 'user' ? userAvatar : aiAvatar}}" mode="aspectFill"></image>
+        <view class="message-content">
+          <text class="message-text">{{item.content}}</text>
+          <text class="message-time">{{item.time}}</text>
+        </view>
+      </view>
+    </block>
+  </scroll-view>
+
+  <!-- 输入区域 -->
+  <view class="input-area {{isLoading ? 'disabled' : ''}}">
+    <input 
+      class="message-input" 
+      type="text" 
+      value="{{inputValue}}" 
+      bindinput="onInputMessage" 
+      placeholder="请输入您的问题"
+      confirm-type="send"
+      bindconfirm="sendMessage"
+      placeholder-class="input-placeholder"
+      disabled="{{isLoading}}"
+    />
+    <button class="send-btn {{isLoading ? 'disabled' : ''}}" bindtap="sendMessage" disabled="{{isLoading}}">
+      <text wx:if="{{!isLoading}}">发送</text>
+      <view wx:else class="loading-icon"></view>
+    </button>
+  </view>
+</view> 

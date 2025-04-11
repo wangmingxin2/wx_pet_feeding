@@ -112,3 +112,24 @@
 .send-btn:active {
   opacity: 0.8;
 }
+
+/* 添加返回按钮样式 */
+.back-button {
+  position: fixed;
+  left: 30rpx;
+  top: 80rpx;
+  width: 60rpx;
+  height: 60rpx;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.back-button image {
+  width: 36rpx;
+  height: 36rpx;
+}

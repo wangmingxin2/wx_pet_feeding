@@ -1,0 +1,159 @@
+.cs-nav-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 顶部背景 */
+.nav-header {
+  position: relative;
+  height: 360rpx;
+  overflow: hidden;
+}
+
+.header-bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.header-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 0 30rpx;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.title {
+  font-size: 42rpx;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 客服选项卡片 */
+.service-options {
+  margin: -60rpx 30rpx 30rpx;
+  position: relative;
+  z-index: 2;
+}
+
+.service-card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  margin-bottom: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+}
+
+.service-icon {
+  width: 100rpx;
+  height: 100rpx;
+  margin-right: 30rpx;
+}
+
+.service-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.service-desc {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.arrow-icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+/* 客服介绍 */
+.service-intro {
+  margin: 30rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.05);
+}
+
+.intro-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.intro-title text {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin: 0 20rpx;
+}
+
+.title-line {
+  height: 2rpx;
+  width: 80rpx;
+  background: #ddd;
+}
+
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40rpx;
+}
+
+.intro-item {
+  display: flex;
+  align-items: flex-start;
+}
+
+.intro-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.intro-text {
+  flex: 1;
+}
+
+.intro-subtitle {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.intro-desc {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  display: block;
+}

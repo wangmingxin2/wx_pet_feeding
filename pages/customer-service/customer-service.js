@@ -5,7 +5,7 @@ Page({
   data: {
     messages: [],
     inputMessage: '',
-    userAvatar: 'http://60.204.157.137:9000/pet/1741678572733_1.jpeg',
+    userAvatar: '/images/default-avatar.png',
     serviceAvatar: '/images/icons/kefu.png',
     lastMessageId: '',
     userId: '',  // 将从storage中获取
@@ -23,6 +23,8 @@ Page({
     const userId = wx.getStorageSync('userId')
     if (userId) {
       this.setData({ userId: userId })
+      // 获取用户头像
+      this.getUserAvatar()
       this.initPage()
     }
   },
@@ -390,6 +392,31 @@ Page({
         console.log('心跳包发送失败，重新建立连接')
         this.setData({ socketOpen: false })
         this.connectSocket()
+      }
+    })
+  },
+
+  // 添加返回方法
+  onTapBack: function () {
+    wx.navigateBack()
+  },
+
+  // 获取用户头像
+  getUserAvatar: function () {
+    // 从用户信息接口获取头像
+    wx.request({
+      url: `http://localhost:8080/user/${this.data.userId}`,
+      method: 'GET',
+      success: (res) => {
+        if (res.data && res.data.code === 200 && res.data.data && res.data.data.avatarUrl) {
+          // 直接使用用户的头像
+          this.setData({
+            userAvatar: res.data.data.avatarUrl
+          })
+        }
+      },
+      fail: (error) => {
+        console.error('获取用户信息失败', error)
       }
     })
   }
