@@ -26,12 +26,23 @@ Page({
     this.getHistoryMessages()
   },
 
+  // 获取请求头
+  getRequestHeader: function () {
+    // 使用固定的token
+    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJvcGVuSWQiOiJvOEVzazQ2OWYtNndHNFRXZzEzVXozSDNTYUljIiwiZXhwIjoxNzQ0NDM0ODcwLCJ1c2VySWQiOjEsImlhdCI6MTc0NDQzMzA3MH0.PtEqcT2lgWcJ4blWDDRDGKgQXHvxbMwn3BmFdXsjbQE'
+    return {
+      'token': `${token}`,
+      'Content-Type': 'application/json'
+    }
+  },
+
   // 获取用户头像
   getUserAvatar: function () {
     // 从用户信息接口获取头像
     wx.request({
       url: `http://localhost:8080/user/${this.data.userId}`,
       method: 'GET',
+      header: this.getRequestHeader(),
       success: (res) => {
         if (res.data && res.data.code === 200 && res.data.data && res.data.data.avatarUrl) {
           // 直接使用用户的头像
@@ -55,6 +66,7 @@ Page({
     wx.request({
       url: `http://localhost:8080/ai/history?userId=${this.data.userId}`,
       method: 'GET',
+      header: this.getRequestHeader(),
       success: (res) => {
         if (res.data.code === 200 && res.data.data) {
           const historyMessages = res.data.data.map(item => {
@@ -137,6 +149,7 @@ Page({
     wx.request({
       url: 'http://localhost:8080/ai/chat',
       method: 'POST',
+      header: this.getRequestHeader(),
       data: {
         prompt: message,
         userId: this.data.userId
@@ -230,6 +243,7 @@ Page({
           wx.request({
             url: `http://localhost:8080/ai/clear?userId=${this.data.userId}`,
             method: 'DELETE',
+            header: this.getRequestHeader(),
             success: (res) => {
               if (res.data.code === 200) {
                 this.setData({
