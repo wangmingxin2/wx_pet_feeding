@@ -400,13 +400,21 @@ Page({
   onTapBack: function () {
     wx.navigateBack()
   },
-
+  // 获取请求头
+  getRequestHeader: function () {
+    const token = wx.getStorageSync('token')
+    return {
+      'token': `${token}`,
+      'Content-Type': 'application/json'
+    }
+  },
   // 获取用户头像
   getUserAvatar: function () {
     // 从用户信息接口获取头像
     wx.request({
       url: `http://localhost:8080/user/${this.data.userId}`,
       method: 'GET',
+      header: this.getRequestHeader(),
       success: (res) => {
         if (res.data && res.data.code === 200 && res.data.data && res.data.data.avatarUrl) {
           // 直接使用用户的头像

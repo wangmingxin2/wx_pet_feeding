@@ -1,0 +1,138 @@
+<view class="membership-container">
+  <!-- 页面头部 -->
+  <view class="header">
+    <view class="back-button" bindtap="navigateBack">
+      <image src="/images/icons/back.png" mode="aspectFit" />
+    </view>
+    <view class="header-title">会员充值</view>
+  </view>
+
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view wx:if="{{loadingUser}}" class="loading-container">
+      <view class="loading"></view>
+    </view>
+    <block wx:else>
+      <view class="avatar-container">
+        <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+        <view class="membership-badge">{{userInfo.membershipLevel}}</view>
+      </view>
+      <view class="user-info">
+        <view class="username">{{userInfo.name}}</view>
+        <view class="balance">账户余额: <text class="amount">¥{{userInfo.balance}}</text></view>
+      </view>
+    </block>
+  </view>
+
+  <!-- 充值卡片 -->
+  <view class="recharge-card">
+    <view class="card-title">选择充值金额</view>
+    <view class="recharge-grid">
+      <view 
+        wx:for="{{rechargeOptions}}" 
+        wx:key="value" 
+        class="option {{selectedOption.value === item.value ? 'selected' : ''}}"
+        bindtap="selectRechargeOption"
+        data-index="{{index}}"
+      >
+        <view class="option-amount">{{item.label}}</view>
+        <view class="option-desc">{{item.description}}</view>
+        <view wx:if="{{item.badge}}" class="option-badge">{{item.badge}}</view>
+      </view>
+      
+      <view 
+        class="option custom {{customAmount ? 'selected' : ''}}"
+        bindtap="selectCustomAmount"
+      >
+        <view class="option-amount">自定义</view>
+        <view class="option-desc">输入金额</view>
+      </view>
+    </view>
+
+    <!-- 自定义金额输入框 -->
+    <block wx:if="{{customAmount}}">
+      <view class="input-container">
+        <view class="input-prefix">¥</view>
+        <input 
+          class="amount-input" 
+          type="digit" 
+          value="{{rechargeAmount}}" 
+          bindinput="inputAmountChange"
+          placeholder="请输入充值金额" 
+          focus="{{customAmount}}"
+          maxlength="8"
+        />
+      </view>
+      
+      <!-- 实际到账金额展示 -->
+      <view wx:if="{{rechargeAmount && rechargeAmount !== '0'}}" class="actual-amount">
+        <view class="actual-item">充值金额: <text class="amount-value">¥{{rechargeAmount}}</text></view>
+        <view class="actual-item">赠送金额: <text class="amount-value bonus">¥{{bonusAmount}}</text></view>
+        <view class="actual-item strong">实际到账: <text class="amount-value total">¥{{actualAmount}}</text></view>
+      </view>
+    </block>
+
+    <!-- 充值说明 -->
+    <view class="recharge-desc">
+      <view class="desc-title">充值说明</view>
+      <view class="desc-item">• 充值200元以上赠送10%</view>
+      <view class="desc-item">• 充值500元以上赠送16%</view>
+      <view class="desc-item">• 充值1000元以上赠送20%</view>
+      <view class="desc-item">• 充值金额可在平台内消费</view>
+    </view>
+
+    <!-- 充值按钮 -->
+    <button class="recharge-btn" bindtap="showPayment">立即充值</button>
+  </view>
+
+  <!-- 支付弹窗 -->
+  <view class="modal-mask" wx:if="{{showPaymentModal}}" bindtap="closePayment"></view>
+  <view class="modal-container" wx:if="{{showPaymentModal}}">
+    <view class="modal-content">
+      <view class="modal-header">
+        <text class="modal-title">确认支付</text>
+        <view class="modal-close" bindtap="closePayment">×</view>
+      </view>
+      <view class="modal-body">
+        <view class="payment-amount">¥ {{rechargeAmount}}</view>
+        
+        <view class="payment-info">
+          <view class="payment-detail">赠送金额: <text class="detail-value">¥{{bonusAmount}}</text></view>
+          <view class="payment-detail strong">实际到账: <text class="detail-value">¥{{actualAmount}}</text></view>
+        </view>
+        
+        <view class="payment-methods">
+          <view class="method-title">选择支付方式</view>
+          <view 
+            class="payment-method {{paymentMethod === 'wechat' ? 'selected' : ''}}" 
+            bindtap="selectPaymentMethod" 
+            data-method="wechat"
+          >
+            <image class="method-icon" src="/images/icons/wechat-pay.png" mode="aspectFit" />
+            <text class="method-name">微信支付</text>
+            <view class="method-check"></view>
+          </view>
+          
+          <view 
+            class="payment-method {{paymentMethod === 'alipay' ? 'selected' : ''}}" 
+            bindtap="selectPaymentMethod" 
+            data-method="alipay"
+          >
+            <image class="method-icon" src="/images/icons/alipay.png" mode="aspectFit" />
+            <text class="method-name">支付宝</text>
+            <view class="method-check"></view>
+          </view>
+        </view>
+
+        <button 
+          class="confirm-btn {{loadingSubmit ? 'loading' : ''}}" 
+          bindtap="confirmRecharge"
+          disabled="{{loadingSubmit}}"
+        >
+          <text wx:if="{{!loadingSubmit}}">确认支付</text>
+          <view wx:else class="btn-loading"></view>
+        </button>
+      </view>
+    </view>
+  </view>
+</view> 

@@ -28,8 +28,7 @@ Page({
 
   // 获取请求头
   getRequestHeader: function () {
-    // 使用固定的token
-    const token = 'eyJhbGciOiJIUzI1NiJ9.eyJvcGVuSWQiOiJvOEVzazQ2OWYtNndHNFRXZzEzVXozSDNTYUljIiwiZXhwIjoxNzQ0NDM0ODcwLCJ1c2VySWQiOjEsImlhdCI6MTc0NDQzMzA3MH0.PtEqcT2lgWcJ4blWDDRDGKgQXHvxbMwn3BmFdXsjbQE'
+    const token = wx.getStorageSync('token')
     return {
       'token': `${token}`,
       'Content-Type': 'application/json'

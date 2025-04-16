@@ -10,7 +10,8 @@
     "pages/profile/edit-info",
     "pages/order/create",
     "pages/customer-service-nav/customer-service-nav",
-    "pages/ai-service/ai-service"
+    "pages/ai-service/ai-service",
+    "pages/membership/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

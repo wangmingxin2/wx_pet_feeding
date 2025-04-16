@@ -1,0 +1,468 @@
+/* pages/membership/index.wxss */
+
+.membership-container {
+  min-height: 100vh;
+  background-color: #f6f7fb;
+  padding-bottom: 40rpx;
+}
+
+/* 头部样式 */
+.header {
+  padding: 40rpx 30rpx 20rpx;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.back-button {
+  position: absolute;
+  left: 30rpx;
+  top: 40rpx;
+}
+
+.back-button image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.header-title {
+  flex: 1;
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  margin: 30rpx auto;
+  width: 90%;
+  background-color: #0c7afa;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  box-shadow: 0 4rpx 16rpx rgba(12, 122, 250, 0.2);
+  min-height: 150rpx;
+}
+
+.loading-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 150rpx;
+}
+
+.loading {
+  width: 40rpx;
+  height: 40rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.avatar-container {
+  position: relative;
+  margin-right: 30rpx;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.6);
+}
+
+.membership-badge {
+  position: absolute;
+  bottom: -10rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffd700;
+  color: #333;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 30rpx;
+  white-space: nowrap;
+  max-width: 130rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.username {
+  font-size: 34rpx;
+  font-weight: bold;
+  margin-bottom: 10rpx;
+}
+
+.balance {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+.amount {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+/* 充值卡片 */
+.recharge-card {
+  margin: 30rpx auto;
+  width: 90%;
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+/* 修改为网格布局 */
+.recharge-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.option {
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 24rpx 20rpx;
+  position: relative;
+  border: 2rpx solid transparent;
+  transition: all 0.3s;
+}
+
+.option.selected {
+  border-color: #0c7afa;
+  background-color: rgba(12, 122, 250, 0.05);
+}
+
+.option-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.option-desc {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.option-badge {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  background-color: #ff4d4f;
+  color: #fff;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 20rpx;
+}
+
+.option.custom {
+  background-color: #f0f2f5;
+}
+
+/* 自定义金额输入框 */
+.input-container {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  border: 2rpx solid #e8e8e8;
+}
+
+.input-prefix {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-right: 20rpx;
+}
+
+.amount-input {
+  flex: 1;
+  height: 60rpx;
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+/* 实际到账金额展示 */
+.actual-amount {
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 30rpx;
+  border-left: 4rpx solid #0c7afa;
+}
+
+.actual-item {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+  display: flex;
+  justify-content: space-between;
+}
+
+.actual-item.strong {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-top: 16rpx;
+}
+
+.amount-value {
+  font-weight: 500;
+  color: #333;
+}
+
+.amount-value.bonus {
+  color: #ff4d4f;
+}
+
+.amount-value.total {
+  color: #0c7afa;
+  font-weight: bold;
+}
+
+/* 充值说明 */
+.recharge-desc {
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 40rpx;
+}
+
+.desc-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.desc-item {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 8rpx;
+  line-height: 1.5;
+}
+
+/* 充值按钮 */
+.recharge-btn {
+  background-color: #0c7afa;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 50rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  margin-top: 20rpx;
+}
+
+.recharge-btn:active {
+  opacity: 0.8;
+}
+
+/* 弹窗样式 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.modal-container {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 30rpx 30rpx 0 0;
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 30rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.modal-close {
+  font-size: 40rpx;
+  color: #999;
+}
+
+.modal-body {
+  padding: 40rpx 30rpx;
+}
+
+.payment-amount {
+  font-size: 60rpx;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+/* 支付详情 */
+.payment-info {
+  background-color: #f8f9fa;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.payment-detail {
+  display: flex;
+  justify-content: space-between;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.payment-detail.strong {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10rpx;
+}
+
+.detail-value {
+  color: #0c7afa;
+  font-weight: 500;
+}
+
+.payment-methods {
+  margin-bottom: 40rpx;
+}
+
+.method-title {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.payment-method {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.payment-method.selected {
+  background-color: #f9f9f9;
+}
+
+.method-icon {
+  width: 50rpx;
+  height: 50rpx;
+  margin-right: 20rpx;
+}
+
+.method-name {
+  flex: 1;
+  font-size: 30rpx;
+  color: #333;
+}
+
+.method-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 2rpx solid #ddd;
+  position: relative;
+}
+
+.payment-method.selected .method-check {
+  border-color: #0c7afa;
+  background-color: #0c7afa;
+}
+
+.payment-method.selected .method-check::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20rpx;
+  height: 20rpx;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.confirm-btn {
+  background-color: #0c7afa;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: bold;
+  border-radius: 50rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  margin-top: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-btn.loading {
+  opacity: 0.8;
+}
+
+.btn-loading {
+  width: 30rpx;
+  height: 30rpx;
+  border: 3rpx solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
